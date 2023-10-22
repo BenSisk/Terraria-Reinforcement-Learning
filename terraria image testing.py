@@ -1,13 +1,10 @@
 import numpy as np
 import cv2
 from mss import mss
-from PIL import Image
 
 import pytesseract
 
-bounding_box = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}
 
-sct = mss()
 
 def ocr(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -18,13 +15,16 @@ def ocr(img):
 
     return ocr_result
 
+
+bounding_box = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}
+sct = mss()
 while True:
     sct_img = sct.grab(bounding_box)
     screen_cap = np.array(sct_img)
     boss_hp_image = screen_cap[995:1020, 850:1070]
     player_hp_image = screen_cap[0:28, 1655:1767]
-    print("Player: " + ocr(player_hp_image))
-    print("Boss:" + ocr(boss_hp_image))
+    # print("Player: " + ocr(player_hp_image))
+    # print("Boss:" + ocr(boss_hp_image))
 
     looky_here_area = screen_cap[160:970]
 
@@ -34,7 +34,7 @@ while True:
     red = cv2.threshold(red, 50, 255, cv2.THRESH_BINARY)[1]
 
     red = cv2.bitwise_not(red)
-    red = cv2.resize(red, (80, 45))
+    red = cv2.resize(red, (800, 500))
 
     cv2.imshow('screen', red)
 
