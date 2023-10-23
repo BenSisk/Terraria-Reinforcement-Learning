@@ -1,2 +1,2 @@
 # Terraria Reinforcement Learning
-Feinforcement learning for Terraria boss fights
+Reinforcement learning for Terraria boss fights
