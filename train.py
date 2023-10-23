@@ -40,25 +40,26 @@ class ReplayBuffer:
 env = GameEnvironment()
 
 # Define hyperparameters
-input_dim = env.image_size[0] * env.image_size[1]
-output_dim = 12  # Assuming four possible keyboard movements
-learning_rate = 0.001
+input_dim = 2  # X and Y Coordinates of the the boss
+output_dim = 4  # Assuming four possible keyboard movements
+learning_rate = 0.01
 gamma = 0.99  # Discount factor
 epsilon = 0.1  # Epsilon-greedy exploration
 
 # Initialize the DQN, target DQN, and optimizer
 dqn = DQN(input_dim, output_dim)
+# dqn.load_state_dict(torch.load("dqn.pth")) # Uncomment this line to load a pre-trained DQN
 target_dqn = DQN(input_dim, output_dim)
 target_dqn.load_state_dict(dqn.state_dict())
 optimizer = optim.Adam(dqn.parameters(), lr=learning_rate)
 
-# Initialize the replay buffer
+# Initialize the replay bufferdDD
 buffer_size = 10000
 replay_buffer = ReplayBuffer(buffer_size)
 
 # Define the training loop
-num_episodes = 1000
-batch_size = 16
+num_episodes = 200
+batch_size = 8
 
 time.sleep(5)  
 
@@ -68,7 +69,7 @@ for episode in range(num_episodes):
     # Reset the environment and observe the initial state
     env.reset()
     time.sleep(2)
-    state = env.red_and_flatten(env.get_screen())
+    state = np.array([-1, -1])
 
     done = False
     total_reward = 0
@@ -79,7 +80,6 @@ for episode in range(num_episodes):
             action = random.randint(0, output_dim - 1)
         else:
             q_values = dqn(torch.FloatTensor(state))
-            print(q_values)
             action = torch.argmax(q_values).item()
 
         # Execute action and observe new state and reward
@@ -123,4 +123,4 @@ for episode in range(num_episodes):
     print(f"Episode {episode}, Total Reward: {total_reward}")
 
 # Save the trained DQN
-torch.save(dqn.state_dict(), "dqn.pth")
+torch.save(dqn.state_dict(), "King_Slime.pth")

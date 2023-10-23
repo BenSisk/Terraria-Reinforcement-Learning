@@ -32,7 +32,7 @@ while True:
     red = cv2.resize(red, (800, 500))
 
     # calculate moments of binary image
-    M = cv2.moments(red) 
+    M = cv2.moments(red)
     
     inverted = np.invert(np.array(red, dtype=np.uint8))
 
@@ -47,9 +47,9 @@ while True:
         cv2.putText(inverted, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100, 100, 100), 2)
     
     
-        angle = math.atan2((cY - 250), (cX - 400)) * (180 / math.pi) + 180
+        angle = math.atan2((cY - 250), (cX - 400))
         # print(angle)
-        cursor = (int(960 - 100 * math.cos(angle * (math.pi / 180))), int(540 - 100 * math.sin(angle * (math.pi / 180))))
+        cursor = (int(960 + 100 * math.cos(angle)), int(540 + 100 * math.sin(angle)))
         mouse.position = cursor
     except:
         print("Error")
