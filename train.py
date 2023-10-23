@@ -33,9 +33,17 @@ class ReplayBuffer:
 
     def sample(self, batch_size):
         return random.sample(self.buffer, batch_size)
+    
+    def size(self):
+        return len(self.buffer)
+
+
+
+env = GameEnvironment()
+
 
 # Define hyperparameters
-input_dim = 2  # Two health point values
+input_dim = env.get_screen().shape[0]  # Assuming the state is a 1D vector
 output_dim = 4  # Assuming four possible keyboard movements
 learning_rate = 0.001
 gamma = 0.99  # Discount factor
@@ -52,16 +60,16 @@ buffer_size = 10000
 replay_buffer = ReplayBuffer(buffer_size)
 
 # Define the training loop
-num_episodes = 1000
-batch_size = 32
+num_episodes = 10
+batch_size = 64
 
-env = GameEnvironment()
 
 for episode in range(num_episodes):
+    print(f"Episode {episode}")
     # state = np.array([hp1, hp2])  # Your health point values
     # state, _, _ = env.step("boop")
 
-    state = np.array([200, 2800])
+    state = env.get_screen()
     done = False
     total_reward = 0
 
@@ -77,14 +85,15 @@ for episode in range(num_episodes):
         # You need to implement this part using your game environment
         next_state, reward, done = env.step(action)
 
-        print(replay_buffer)
-        replay_buffer = replay_buffer.add((state, action, reward, next_state, done))
+        replay_buffer.add((state, action, reward, next_state, done))
 
         state = next_state
         total_reward += reward
 
+
         # Sample a random batch from the replay buffer and perform a Q-learning update
-        if len(replay_buffer) >= batch_size:
+        if replay_buffer.size() >= batch_size:
+            print("action: ", action)
             batch = replay_buffer.sample(batch_size)
             states, actions, rewards, next_states, dones = zip(*batch)
 

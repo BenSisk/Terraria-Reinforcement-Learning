@@ -65,6 +65,10 @@ class GameEnvironment:
         self.keyboard.release('1')
 
     def step(self, action):
+        state = self.get_screen()
+        return state, 1, False
+
+    def get_screen(self):
         sct_img = self.sct.grab(self.bounding_box)
         screen_cap = np.array(sct_img)
         looky_here_area = screen_cap[160:970]
@@ -72,9 +76,6 @@ class GameEnvironment:
         red = cv2.blur(red, (10, 10))
         red = cv2.threshold(red, 50, 255, cv2.THRESH_BINARY)[1]
         red = cv2.bitwise_not(red)
-        red = cv2.resize(red, (800, 500))
+        red = cv2.resize(red, (192, 81))
         state = red.flatten()
-
-        print(action)
-
-        return state, 1, False
+        return state
