@@ -9,7 +9,6 @@ def check_hp_bar(image, flipped=False):
     red = cv2.threshold(red, 50, 255, cv2.THRESH_BINARY)[1]
     red = cv2.resize(red, (100, 1))
 
-
     index = 0
     for pixel in red[0, :]:
         if (pixel == 0):

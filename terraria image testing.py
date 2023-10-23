@@ -21,14 +21,14 @@ sct = mss()
 while True:
     sct_img = sct.grab(bounding_box)
     screen_cap = np.array(sct_img)
-    boss_hp_image = screen_cap[995:1020, 850:1070]
-    player_hp_image = screen_cap[0:28, 1655:1767]
+    # boss_hp_image = screen_cap[995:1020, 850:1070]
+    # player_hp_image = screen_cap[0:28, 1655:1767]
     # print("Player: " + ocr(player_hp_image))
     # print("Boss:" + ocr(boss_hp_image))
 
-    looky_here_area = screen_cap[160:970]
+    visible_area = screen_cap[160:970]
 
-    blue, green, red, not_sure = cv2.split(looky_here_area)
+    blue, green, red, not_sure = cv2.split(visible_area)
 
     red = cv2.blur(red, (10, 10))
     blue = cv2.blur(blue, (10, 10))

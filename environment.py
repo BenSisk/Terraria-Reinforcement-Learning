@@ -77,23 +77,24 @@ class GameEnvironment:
         time.sleep(1)
         self.mouse.press(Button.left)
 
+
     def step(self, action):
         
         if (action == 0):
             self.keyboard.press(Key.space)
-            time.sleep(0.01)
+            time.sleep(0.1)
             self.keyboard.release(Key.space)
         elif (action == 1):
             self.keyboard.press('a')
-            time.sleep(0.01)
+            time.sleep(0.1)
             self.keyboard.release('a')
         elif (action == 2):
             self.keyboard.press('s')
-            time.sleep(0.01)
+            time.sleep(0.1)
             self.keyboard.release('s')
         elif (action == 3):
             self.keyboard.press('d')
-            time.sleep(0.01)
+            time.sleep(0.1)
             self.keyboard.release('d')
         elif (action == 4):
             self.mouse.position = (760, 540)
@@ -166,21 +167,38 @@ class GameEnvironment:
         return screen
     
     def get_hp(self, img):
-        boss_hp = self.ocr(image=(img[995:1020, 850:1070]))
-        player_hp = self.ocr(image=(img[0:28, 1655:1767]))
+        # boss_hp = self.ocr(image=(img[995:1020, 850:1070]))
+        # player_hp = self.ocr(image=(img[0:28, 1655:1767]))
+
+
         return player_hp, boss_hp
     
-    def ocr(self, image):
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        image = cv2.threshold(image, 150, 255, cv2.THRESH_BINARY)[1]
+    # def ocr(self, image):
+    #     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #     image = cv2.threshold(image, 150, 255, cv2.THRESH_BINARY)[1]
 
-        ocr_result = pytesseract.image_to_string(image, lang='eng', \
-            config='--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789/')
+    #     ocr_result = pytesseract.image_to_string(image, lang='eng', \
+    #         config='--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789/')
         
-        try:
-            ocr_result = ocr_result.split('/')[0]
-            ocr_result = int(ocr_result)
-        except:
-            ocr_result = -1
-            print("Error parsing OCR result: ", ocr_result)
-        return ocr_result
+    #     try:
+    #         ocr_result = ocr_result.split('/')[0]
+    #         ocr_result = int(ocr_result)
+    #     except:
+    #         ocr_result = -1
+    #         print("Error parsing OCR result: ", ocr_result)
+    #     return ocr_result
+    
+    def check_hp_bar(image, flipped=False):
+        _, _, red, _ = cv2.split(image)
+
+        red = cv2.blur(red, (5, 5))
+        red = cv2.threshold(red, 50, 255, cv2.THRESH_BINARY)[1]
+        red = cv2.resize(red, (100, 1))
+
+        index = 0
+        for pixel in red[0, :]:
+            if (pixel == 0):
+                break
+            index += 1
+
+        return index

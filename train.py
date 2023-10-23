@@ -60,7 +60,7 @@ replay_buffer = ReplayBuffer(buffer_size)
 num_episodes = 1000
 batch_size = 16
 
-time.sleep(5)
+time.sleep(5)  
 
 for episode in range(num_episodes):
     print(f"Episode {episode}")
@@ -68,8 +68,7 @@ for episode in range(num_episodes):
     # Reset the environment and observe the initial state
     env.reset()
     time.sleep(2)
-    screen = env.get_screen()
-    state = env.red_and_flatten(screen)
+    state = env.red_and_flatten(env.get_screen())
 
     done = False
     total_reward = 0
@@ -80,6 +79,7 @@ for episode in range(num_episodes):
             action = random.randint(0, output_dim - 1)
         else:
             q_values = dqn(torch.FloatTensor(state))
+            print(q_values)
             action = torch.argmax(q_values).item()
 
         # Execute action and observe new state and reward
