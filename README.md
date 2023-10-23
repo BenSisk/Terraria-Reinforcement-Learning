@@ -1,2 +1,2 @@
-# Image-Based-Reinforcement-Learning
-Image-based reinforcement learning for Terraria boss fights
+# Terraria Reinforcement Learning
+Feinforcement learning for Terraria boss fights
