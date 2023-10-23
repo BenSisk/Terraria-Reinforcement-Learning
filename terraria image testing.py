@@ -31,9 +31,13 @@ while True:
     blue, green, red, not_sure = cv2.split(looky_here_area)
 
     red = cv2.blur(red, (10, 10))
-    red = cv2.threshold(red, 50, 255, cv2.THRESH_BINARY)[1]
+    blue = cv2.blur(blue, (10, 10))
+    green = cv2.blur(green, (10, 10))
+    average = (blue + green) / 2
+    red = red - average
+    red = cv2.threshold(red, 100, 255, cv2.THRESH_BINARY)[1]
 
-    red = cv2.bitwise_not(red)
+    red = np.invert(np.array(red, dtype=np.uint8))
     red = cv2.resize(red, (800, 500))
 
     cv2.imshow('screen', red)

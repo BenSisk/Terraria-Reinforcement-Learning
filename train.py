@@ -3,10 +3,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import random
-import gym
 from collections import deque
 from mss import mss
-import cv2
+import time
 
 from environment import GameEnvironment
 
@@ -38,13 +37,11 @@ class ReplayBuffer:
         return len(self.buffer)
 
 
-
 env = GameEnvironment()
 
-
 # Define hyperparameters
-input_dim = env.get_screen().shape[0]  # Assuming the state is a 1D vector
-output_dim = 4  # Assuming four possible keyboard movements
+input_dim = env.image_size[0] * env.image_size[1]
+output_dim = 12  # Assuming four possible keyboard movements
 learning_rate = 0.001
 gamma = 0.99  # Discount factor
 epsilon = 0.1  # Epsilon-greedy exploration
@@ -60,16 +57,20 @@ buffer_size = 10000
 replay_buffer = ReplayBuffer(buffer_size)
 
 # Define the training loop
-num_episodes = 10
-batch_size = 64
+num_episodes = 1000
+batch_size = 16
 
+time.sleep(5)
 
 for episode in range(num_episodes):
     print(f"Episode {episode}")
-    # state = np.array([hp1, hp2])  # Your health point values
-    # state, _, _ = env.step("boop")
 
-    state = env.get_screen()
+    # Reset the environment and observe the initial state
+    env.reset()
+    time.sleep(2)
+    screen = env.get_screen()
+    state = env.red_and_flatten(screen)
+
     done = False
     total_reward = 0
 
@@ -93,7 +94,7 @@ for episode in range(num_episodes):
 
         # Sample a random batch from the replay buffer and perform a Q-learning update
         if replay_buffer.size() >= batch_size:
-            print("action: ", action)
+            # print("action: ", action)
             batch = replay_buffer.sample(batch_size)
             states, actions, rewards, next_states, dones = zip(*batch)
 
@@ -120,3 +121,6 @@ for episode in range(num_episodes):
         target_dqn.load_state_dict(dqn.state_dict())
 
     print(f"Episode {episode}, Total Reward: {total_reward}")
+
+# Save the trained DQN
+torch.save(dqn.state_dict(), "dqn.pth")
