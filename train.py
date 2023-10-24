@@ -61,14 +61,13 @@ replay_buffer = ReplayBuffer(buffer_size)
 num_episodes = 200
 batch_size = 8
 
-time.sleep(5)  
+time.sleep(2)
 
 for episode in range(num_episodes):
     print(f"Episode {episode}")
 
     # Reset the environment and observe the initial state
     env.reset()
-    time.sleep(2)
     state = np.array([-1, -1])
 
     done = False
@@ -77,24 +76,23 @@ for episode in range(num_episodes):
     while not done:
         # Epsilon-greedy action selection
         if random.random() < epsilon:
-            action = random.randint(0, output_dim - 1)
+            q_value = torch.zeros(output_dim)
+            for i in range(output_dim):
+                q_value[i] = random.randint(0, 100)
+            action = torch.argmax(q_value).item()
         else:
-            q_values = dqn(torch.FloatTensor(state))
-            action = torch.argmax(q_values).item()
+            q_value = dqn(torch.FloatTensor(state))
+            action = torch.argmax(q_value).item()
 
-        # Execute action and observe new state and reward
-        # You need to implement this part using your game environment
-        next_state, reward, done = env.step(action)
+        next_state, reward, done = env.step(q_value.tolist())
 
         replay_buffer.add((state, action, reward, next_state, done))
 
         state = next_state
         total_reward += reward
 
-
         # Sample a random batch from the replay buffer and perform a Q-learning update
         if replay_buffer.size() >= batch_size:
-            # print("action: ", action)
             batch = replay_buffer.sample(batch_size)
             states, actions, rewards, next_states, dones = zip(*batch)
 
@@ -105,13 +103,13 @@ for episode in range(num_episodes):
             dones = torch.FloatTensor(dones)
 
             # Compute Q-values and target Q-values
-            q_values = dqn(states)
+            q_valuess = dqn(states)
             target_q_values = target_dqn(next_states)
             max_target_q_values = torch.max(target_q_values, dim=1).values
             target_q_values = rewards + gamma * (1 - dones) * max_target_q_values
 
             # Compute the loss and update the DQN
-            loss = nn.MSELoss()(q_values.gather(1, actions.view(-1, 1)), target_q_values.unsqueeze(1))
+            loss = nn.MSELoss()(q_valuess.gather(1, actions.view(-1, 1)), target_q_values.unsqueeze(1))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()

@@ -92,29 +92,31 @@ class GameEnvironment:
         time.sleep(0.1)
         self.keyboard.release('h')
         
-        time.sleep(1)
+        time.sleep(0.2)
         self.mouse.press(Button.left)
 
         self.startTime = time.time()
 
 
-    def step(self, action):
-        
-        if (action == 0):
+    def step(self, qvalues):
+        if (qvalues[0] > 50):
             self.keyboard.press(Key.space)
-            time.sleep(0.1)
+        else:
             self.keyboard.release(Key.space)
-        elif (action == 1):
+
+        if (qvalues[1] > 50):
             self.keyboard.press('a')
-            time.sleep(0.1)
+        else:
             self.keyboard.release('a')
-        elif (action == 2):
+
+        if (qvalues[2] > 50):
             self.keyboard.press('s')
-            time.sleep(0.1)
+        else:
             self.keyboard.release('s')
-        elif (action == 3):
+
+        if (qvalues[3] > 50):
             self.keyboard.press('d')
-            time.sleep(0.1)
+        else:
             self.keyboard.release('d')
 
         screen = self.get_screen()

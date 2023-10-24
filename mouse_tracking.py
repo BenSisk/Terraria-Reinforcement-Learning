@@ -26,8 +26,8 @@ while True:
     green = cv2.blur(green, (10, 10))
     average = (blue + green) / 2
     red = red - average
-    red = cv2.blur(red, (50, 50))
-    red = cv2.threshold(red, 100, 255, cv2.THRESH_BINARY)[1]
+    red = cv2.blur(red, (30, 30))
+    red = cv2.threshold(red, 50, 255, cv2.THRESH_BINARY)[1]
 
     red = cv2.resize(red, (800, 500))
 
