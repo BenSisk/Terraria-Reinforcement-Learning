@@ -26,11 +26,15 @@ class GameEnvironment:
         self.sct = mss()
 
     def reset(self):
+        self.mouse.release(Button.left)
+        self.keyboard.release(Key.space)
+        self.keyboard.release('a')
+        self.keyboard.release('s')
+        self.keyboard.release('d')
         self.previous_boss_hp = 0
         self.previous_player_hp = 0
         self.Low_HP_Boss = False
 
-        self.mouse.release(Button.left)
         time.sleep(1)
         self.mouse.position = (960, 1070)
         time.sleep(0.1)
@@ -129,13 +133,13 @@ class GameEnvironment:
         else:
             self.previous_angle = angle
 
-        self.mouse.position = (int(960 + 100 * math.cos(angle)), int(540 + 100 * math.sin(angle)))
+        self.mouse.position = (int(960 + (100 * math.cos(angle))), int(540 + 50 +(100 * math.sin(angle))))
         
         reward = 0
         done = False
 
         if (player_hp < self.previous_player_hp):
-            reward = reward - 1
+            reward = reward - 3
         if (boss_hp < self.previous_boss_hp):
             reward = reward + 1
 
@@ -156,7 +160,7 @@ class GameEnvironment:
             done = True
 
         if (done):
-            reward = reward - round(((time.time() - self.startTime) / 5))
+            reward = reward - round(((time.time() - self.startTime) / 10))
 
         return state, reward, done
 
@@ -232,8 +236,7 @@ class GameEnvironment:
         
             angle = math.atan2((cY - 250), (cX - 400))
             # print(angle)
-            cursor = (int(960 + 100 * math.cos(angle)), int(540 + 100 * math.sin(angle)))
-            self.mouse.position = cursor
+            # return cX, cY, angle
             return cX, cY, angle
         except:
             # print("Error")

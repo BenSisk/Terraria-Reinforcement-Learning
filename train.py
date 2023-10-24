@@ -48,7 +48,7 @@ epsilon = 0.1  # Epsilon-greedy exploration
 
 # Initialize the DQN, target DQN, and optimizer
 dqn = DQN(input_dim, output_dim)
-# dqn.load_state_dict(torch.load("dqn.pth")) # Uncomment this line to load a pre-trained DQN
+dqn.load_state_dict(torch.load("King_Slime_300.pth")) # Uncomment this line to load a pre-trained DQN
 target_dqn = DQN(input_dim, output_dim)
 target_dqn.load_state_dict(dqn.state_dict())
 optimizer = optim.Adam(dqn.parameters(), lr=learning_rate)
@@ -58,7 +58,7 @@ buffer_size = 10000
 replay_buffer = ReplayBuffer(buffer_size)
 
 # Define the training loop
-num_episodes = 200
+num_episodes = 50
 batch_size = 8
 
 time.sleep(2)
@@ -119,6 +119,5 @@ for episode in range(num_episodes):
         target_dqn.load_state_dict(dqn.state_dict())
 
     print(f"Episode {episode}, Total Reward: {total_reward}")
-
-# Save the trained DQN
-torch.save(dqn.state_dict(), "King_Slime.pth")
+    # Save the trained DQN
+    torch.save(dqn.state_dict(), "King_Slime.pth")
