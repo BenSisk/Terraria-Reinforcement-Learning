@@ -2,18 +2,18 @@ import numpy as np
 import cv2
 from mss import mss
 
-import pytesseract
+# import pytesseract
 
 
 
-def ocr(img):
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    img = cv2.threshold(img, 150, 255, cv2.THRESH_BINARY)[1]
+# def ocr(img):
+#     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#     img = cv2.threshold(img, 150, 255, cv2.THRESH_BINARY)[1]
 
-    ocr_result = pytesseract.image_to_string(img, lang='eng', \
-           config='--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789/')
+#     ocr_result = pytesseract.image_to_string(img, lang='eng', \
+#            config='--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789/')
 
-    return ocr_result
+#     return ocr_result
 
 
 bounding_box = {'top': 0, 'left': 0, 'width': 1920, 'height': 1080}

@@ -86,7 +86,7 @@ class GameEnvironment:
         time.sleep(0.1)
         self.mouse.release(Button.left)
 
-        time.sleep(0.2)
+        time.sleep(0.3)
         self.keyboard.press('1')
         time.sleep(0.1)
         self.keyboard.release('1')
@@ -133,7 +133,8 @@ class GameEnvironment:
         else:
             self.previous_angle = angle
 
-        self.mouse.position = (int(960 + (100 * math.cos(angle))), int(540 + 50 +(100 * math.sin(angle))))
+        # self.mouse.position = (int(960 + (100 * math.cos(angle))), int(540 + 50 +(100 * math.sin(angle))))
+        self.mouse.position = (int(960 + (100 * math.cos(angle))), int(540 + (100 * math.sin(angle))))
         
         reward = 0
         done = False

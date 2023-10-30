@@ -48,7 +48,8 @@ epsilon = 0.1  # Epsilon-greedy exploration
 
 # Initialize the DQN, target DQN, and optimizer
 dqn = DQN(input_dim, output_dim)
-dqn.load_state_dict(torch.load("King_Slime_300.pth")) # Uncomment this line to load a pre-trained DQN
+# dqn.load_state_dict(torch.load("King_Slime_300.pth")) # Uncomment this line to load a pre-trained DQN
+dqn.load_state_dict(torch.load("models/eye_of_cthulhu.pth")) # Uncomment this line to load a pre-trained DQN
 target_dqn = DQN(input_dim, output_dim)
 target_dqn.load_state_dict(dqn.state_dict())
 optimizer = optim.Adam(dqn.parameters(), lr=learning_rate)
@@ -120,4 +121,4 @@ for episode in range(num_episodes):
 
     print(f"Episode {episode}, Total Reward: {total_reward}")
     # Save the trained DQN
-    torch.save(dqn.state_dict(), "King_Slime.pth")
+    # torch.save(dqn.state_dict(), "King_Slime.pth")
